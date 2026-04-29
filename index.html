@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحميل تطبيق أبو إلياس للكهرباء</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode { background-color: #020617; color: #f1f5f9; }
+        .light-mode { background-color: #f8fafc; color: #0f172a; }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .phone-frame {
+            border: 12px solid #1e293b;
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            background: #0f172a;
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <nav class="fixed w-full z-50 py-4 px-6 glass-card">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-bolt text-sky-400 text-2xl"></i>
+                <span class="text-xl font-black tracking-wider">أبو إلياس للكهرباء</span>
+            </div>
+            
+            <button id="themeToggle" onclick="toggleTheme()" class="p-2 rounded-full hover:bg-white/10 transition">
+                <i class="fas fa-moon text-xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
+        <div data-aos="fade-up" class="max-w-3xl">
+            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+                أدر تجارتك <br> <span class="gradient-text">بذكاء واحترافية</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 mb-10 leading-relaxed">
+                تطبيق الإدارة المتكامل لمخازن الكهرباء. نظام الباركود، مزامنة الأسعار بالدولار، وإصدار الفواتير الفورية في تطبيق واحد مصمم خصيصاً لك.
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="#" class="bg-sky-500 hover:bg-sky-600 text-white px-10 py-5 rounded-2xl font-bold flex items-center gap-4 transition transform hover:scale-105 shadow-xl shadow-sky-500/25">
+                    <i class="fas fa-file-download text-2xl"></i>
+                    <div class="text-right">
+                        <p class="text-xs opacity-80">جاهز للتحميل</p>
+                        <p class="text-lg">تحميل ملف APK مباشر</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-sky-500/5">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+            <div class="flex-1" data-aos="fade-left">
+                <h2 class="text-4xl font-black mb-6">واجهة عصرية <span class="text-sky-500">تدعم الوضع الداكن</span></h2>
+                <p class="text-slate-400 text-lg mb-8">تصميم مريح للعين يسهل عليك العمل لساعات طويلة في المحل، مع تنظيم فائق للمنتجات والفئات.</p>
+                <ul class="space-y-4 text-lg">
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-check-circle text-sky-500"></i> تنظيم المنتجات حسب الفئات
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-check-circle text-sky-500"></i> تنبيهات عند اقتراب نفاذ المخزون
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-check-circle text-sky-500"></i> قاعدة بيانات سحابية (Firebase)
+                    </li>
+                </ul>
+            </div>
+            <div class="flex-1" data-aos="fade-right">
+                <div class="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-2xl">
+                    <div class="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[72px] rounded-s-lg"></div>
+                    <div class="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[124px] rounded-s-lg"></div>
+                    <div class="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[178px] rounded-s-lg"></div>
+                    <div class="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -end-[17px] top-[142px] rounded-e-lg"></div>
+                    <div class="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-slate-900">
+                        <div class="flex flex-col h-full items-center justify-center p-4">
+                            <i class="fas fa-bolt text-sky-500 text-6xl mb-4 animate-pulse"></i>
+                            <p class="text-white font-bold">لوحة تحكم أبو إلياس</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 bg-slate-900/30 border-y border-slate-800/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <span class="text-sky-400 font-bold mb-2 block uppercase tracking-widest">نظام الصلاحيات</span>
+                <h2 class="text-4xl md:text-5xl font-black mb-6">واجهات مخصصة لكل دور</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-lg">سواء كنت المدير المتحكم في كل شيء أو الكاشير الذي ينجز المبيعات.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div class="flex flex-col md:flex-row items-center gap-8 glass-card p-8 rounded-[2.5rem] border-green-500/20" data-aos="fade-right">
+                    <div class="phone-frame w-[180px] h-[380px] flex-shrink-0">
+                        <div class="p-4 flex flex-col h-full bg-slate-900">
+                            <div class="h-6 bg-green-500/20 rounded-lg mb-4"></div>
+                            <div class="space-y-2">
+                                <div class="h-10 bg-slate-800 rounded"></div>
+                                <div class="h-10 bg-slate-800 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mb-4">
+                            <i class="fas fa-cash-register text-green-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">واجهة الكاشير</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">تركز على السرعة، مسح الباركود، وإصدار الفواتير للزبائن بالليرة السورية.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row-reverse items-center gap-8 glass-card p-8 rounded-[2.5rem] border-sky-500/20" data-aos="fade-left">
+                    <div class="phone-frame w-[180px] h-[380px] flex-shrink-0">
+                        <div class="p-4 flex flex-col h-full bg-slate-900">
+                            <div class="h-6 bg-sky-500/20 rounded-lg mb-4"></div>
+                            <div class="h-20 bg-slate-800 rounded-lg"></div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center mb-4">
+                            <i class="fas fa-user-shield text-sky-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">واجهة المدير</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">إدارة المخزون، تعديل أسعار الصرف، ومراقبة التقارير المالية الدقيقة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 px-6 text-center border-t border-slate-800">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <i class="fas fa-bolt text-sky-500 text-2xl"></i>
+                <span class="text-xl font-black">Abdullrahman Abdullah</span>
+            </div>
+            <div class="flex justify-center gap-8 mb-10">
+                <a href="https://wa.me/+963981082693" class="text-slate-400 hover:text-green-500 text-3xl transition">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://www.instagram.com/abdullrahman.abdulah?igsh=MTY3Y2ducXRieW1rOA==" class="text-slate-400 hover:text-sky-400 text-3xl transition">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            <p class="text-slate-600 text-xs italic">جميع الحقوق محفوظة &copy; 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeToggle').querySelector('i');
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode'); body.classList.add('light-mode');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode'); body.classList.add('dark-mode');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        if (localStorage.getItem('theme') === 'light') toggleTheme();
+    </script>
+</body>
+</html>
