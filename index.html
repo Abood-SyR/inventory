@@ -3,138 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحميل التطبيق | أبو إلياس للكهرباء</title>
-    
+    <title>تحميل التطبيق</title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #050505; /* أسود أعمق لإبراز التوهج */
-            color: #fafafa;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            overflow: hidden; 
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* 1. الشبكة المتحركة المضيئة */
-        .animated-grid {
+        /* ===== خلفية الشبكة المتوهجة (من كودك الأصلي) ===== */
+        .bg-animated {
             position: fixed;
-            inset: -50%; /* تكبير الحجم للسماح بالحركة دون ظهور حواف */
-            z-index: -2;
-            background-size: 40px 40px;
-            /* خطوط بلون أزرق سماوي خافت */
-            background-image: 
-                linear-gradient(to right, rgba(56, 189, 248, 0.12) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(56, 189, 248, 0.12) 1px, transparent 1px);
-            /* قناع التلاشي */
-            mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
-            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
-            /* حركة عشوائية بطيئة */
-            animation: randomMove 25s ease-in-out infinite;
-        }
-
-        /* 2. توهج في المنتصف لإبراز الزر */
-        .center-glow {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            pointer-events: none;
-            filter: blur(30px);
+            background:
+                radial-gradient(circle at 20% 30%, rgba(100, 100, 255, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(255, 100, 255, 0.1) 0%, transparent 35%),
+                radial-gradient(circle at 40% 80%, rgba(100, 255, 255, 0.1) 0%, transparent 40%),
+                #0a0a0a;
+            animation: bgPulse 10s ease-in-out infinite alternate;
         }
 
-        /* حركة عشوائية تنتقل بين الاتجاهات */
-        @keyframes randomMove {
-            0% { background-position: 0px 0px; }
-            20% { background-position: -40px 20px; }
-            40% { background-position: 30px -40px; }
-            60% { background-position: -20px -20px; }
-            80% { background-position: 20px 30px; }
-            100% { background-position: 0px 0px; }
+        @keyframes bgPulse {
+            0% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
         }
 
-        /* زر تحميل بسيط وحاد */
+        .bg-animated::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 20px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 20px);
+            animation: moveGrid 30s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(30px) translateY(30px); }
+        }
+
+        /* ===== الجزيئات ===== */
+        .particle {
+            position: absolute;
+            width: 3px; height: 3px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+            animation: particleFloat 15s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+        }
+
+        /* ===== الكارت الزجاجي ===== */
+        .glass-card {
+            backdrop-filter: blur(20px);
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px -20px rgba(0,0,0,0.8);
+        }
+
+        /* ===== أيقونة التطبيق ===== */
+        .app-icon {
+            width: 140px;
+            height: 140px;
+            border-radius: 32px;
+            object-fit: cover;
+            box-shadow: 0 0 60px rgba(100, 150, 255, 0.4),
+                        0 20px 40px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.1);
+            animation: iconFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ===== زر التحميل ===== */
         .download-btn {
-            background-color: #ffffff;
-            color: #050505;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 0 rgba(255, 255, 255, 0); /* استعداد للتوهج */
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 18px 60px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.4);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.7s ease;
         }
 
         .download-btn:hover {
-            background-color: #e4e4e7;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); /* توهج خفيف عند التمرير */
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.6);
         }
 
-        /* أيقونات التواصل */
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ===== أيقونات التواصل ===== */
         .social-icon {
-            color: #71717a;
-            transition: color 0.2s ease;
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .social-icon:hover {
-            color: #ffffff;
+            transform: translateY(-5px) scale(1.1);
+            color: #fff;
         }
+
+        .social-icon.whatsapp:hover {
+            background: #25D366;
+            border-color: #25D366;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+        }
+
+        .social-icon.instagram:hover {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            border-color: #dc2743;
+            box-shadow: 0 10px 30px rgba(220, 39, 67, 0.5);
+        }
+
+        /* ===== نص متدرج ===== */
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 50%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* ===== شارة الإصدار ===== */
+        .version-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 50px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #a5b4fc;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== Powered by ===== */
+        .powered-by {
+            color: #666;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .powered-by a {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .powered-by a:hover {
+            color: #fff;
+        }
+
+        /* ===== حالات التحميل / الخطأ ===== */
+        .state-hidden { display: none !important; }
+
+        .spinner {
+            width: 50px; height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #8b5cf6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <!-- عناصر الخلفية -->
-    <div class="animated-grid"></div>
-    <div class="center-glow"></div>
+    <!-- خلفية الشبكة المتوهجة -->
+    <div class="bg-animated"></div>
+    <div id="particles"></div>
 
     <!-- المحتوى الرئيسي -->
-    <main class="flex-1 flex flex-col items-center justify-center text-center px-4 relative z-10">
-        
-        <!-- أيقونة التطبيق -->
-        <img src="icon.png" alt="أيقونة التطبيق" class="w-24 h-24 rounded-2xl mb-6 border border-zinc-800 object-cover shadow-2xl bg-zinc-900">
+    <main class="min-h-screen flex flex-col items-center justify-center px-6 py-12">
 
-        <!-- اسم التطبيق -->
-        <h1 class="text-2xl font-bold mb-1">أبو إلياس للكهرباء</h1>
-        
-        <!-- رقم الإصدار -->
-        <p class="text-sm text-zinc-500 font-medium mb-8">الإصدار 2.1.2</p>
+        <!-- حالة التحميل -->
+        <div id="loadingState" class="flex flex-col items-center gap-4">
+            <div class="spinner"></div>
+            <p class="text-gray-400">جاري التحميل...</p>
+        </div>
 
-        <!-- زر التحميل -->
-        <a href="https://huggingface.co/spaces/resonta/inventory_download/resolve/main/app.apk" 
-           rel="noreferrer"
-           class="download-btn flex items-center justify-center gap-3 px-10 py-4 rounded-md font-bold text-lg w-full max-w-xs sm:w-auto">
-            <i class="fab fa-android text-xl"></i>
-            تحميل التطبيق
-        </a>
+        <!-- حالة الخطأ -->
+        <div id="errorState" class="state-hidden glass-card p-12 text-center max-w-md">
+            <i class="fas fa-triangle-exclamation text-5xl text-yellow-500 mb-4"></i>
+            <h2 class="text-2xl font-bold mb-2">التطبيق غير موجود</h2>
+            <p class="text-gray-400 text-sm">تأكد من الرابط أو تواصل معنا</p>
+        </div>
 
-    </main>
+        <!-- كارت التطبيق -->
+        <div id="appState" class="state-hidden flex flex-col items-center w-full max-w-md">
 
-    <!-- التذييل (الأسفل) -->
-    <footer class="w-full py-8 px-6 flex flex-col items-center gap-6 relative z-10">
-        
+            <div class="glass-card p-10 md:p-12 w-full flex flex-col items-center text-center">
+
+                <!-- أيقونة التطبيق -->
+                <img id="appIcon" class="app-icon mb-6" src="" alt="App Icon">
+
+                <!-- اسم التطبيق -->
+                <h1 id="appName" class="text-4xl font-black gradient-text mb-3"></h1>
+
+                <!-- الإصدار -->
+                <span id="appVersion" class="version-badge mb-8"></span>
+
+                <!-- زر التحميل -->
+                <button id="downloadBtn" class="download-btn">
+                    <i class="fas fa-download"></i>
+                    <span>تحميل التطبيق</span>
+                </button>
+
+                <!-- معلومة صغيرة -->
+                <p id="appSize" class="text-gray-500 text-xs mt-6"></p>
+
+            </div>
+
+        </div>
+
         <!-- أيقونات التواصل -->
-        <div class="flex gap-6">
-            <a href="https://wa.me/+963981082693" class="social-icon text-2xl" title="واتساب">
+        <div class="flex gap-4 mt-10">
+            <a id="whatsappLink" href="#" class="social-icon whatsapp" title="واتساب">
                 <i class="fab fa-whatsapp"></i>
             </a>
-            <a href="https://www.instagram.com/abdullrahman.abdulah" class="social-icon text-2xl" title="إنستغرام">
+            <a id="instagramLink" href="#" class="social-icon instagram" title="انستغرام">
                 <i class="fab fa-instagram"></i>
             </a>
         </div>
 
-        <!-- الحقوق -->
-        <p class="text-xs text-zinc-600 font-semibold tracking-wide uppercase">
-            POWERED BY ABDULLRAHMAN ABDULLAH
+        <!-- Powered by -->
+        <p class="powered-by mt-8">
+            POWERED BY <a href="https://wa.me/963981082693" target="_blank">Abdullrahman Abdullah</a>
         </p>
 
-    </footer>
+    </main>
+
+    <script>
+        /* ============================================================
+           1) قاعدة بيانات التطبيقات
+           أضف/عدّل التطبيقات هنا فقط
+           ============================================================ */
+        const APPS = {
+            "warsha": {
+                name: "Warsha",
+                version: "v1.0.0",
+                icon: "icons/warsha.png",
+                download: "https://github.com/Abdullrahman-Abdullah/Warsha-Lab/releases/download/Reson-FTP/ResonFTP.apk",
+                size: "12 MB"
+            },
+            "reson": {
+                name: "Reson FTP",
+                version: "v1.2.0",
+                icon: "icons/reson.png",
+                download: "https://github.com/Abdullrahman-Abdullah/Warsha-Lab/releases/download/Reson-FTP/ResonFTP.apk",
+                size: "8 MB"
+            },
+            "app3": {
+                name: "تطبيقي الثالث",
+                version: "v2.0.1",
+                icon: "icons/app3.png",
+                download: "https://example.com/app3.apk",
+                size: "20 MB"
+            }
+            // أضف المزيد هنا...
+        };
+
+        /* ============================================================
+           2) روابط التواصل (يمكنك تعديلها)
+           ============================================================ */
+        const WHATSAPP_URL = "https://wa.me/963981082693";
+        const INSTAGRAM_URL = "https://www.instagram.com/abdullrahman.abdulah";
+
+        document.getElementById('whatsappLink').href = WHATSAPP_URL;
+        document.getElementById('instagramLink').href = INSTAGRAM_URL;
+
+        /* ============================================================
+           3) جزيئات الخلفية
+           ============================================================ */
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 10 + 's';
+                p.style.animationDuration = (10 + Math.random() * 15) + 's';
+                container.appendChild(p);
+            }
+        }
+        createParticles();
+
+        /* ============================================================
+           4) منطق عرض التطبيق حسب الرابط
+           ============================================================ */
+        function showState(state) {
+            ['loadingState', 'errorState', 'appState'].forEach(id => {
+                document.getElementById(id).classList.add('state-hidden');
+            });
+            document.getElementById(state).classList.remove('state-hidden');
+        }
+
+        function initApp() {
+            // قراءة باراميتر ?app=
+            const params = new URLSearchParams(window.location.search);
+            const appKey = (params.get('app') || '').toLowerCase().trim();
+
+            // لا يوجد باراميتر أو غير معروف
+            if (!appKey || !APPS[appKey]) {
+                showState('errorState');
+                document.title = 'التطبيق غير موجود';
+                return;
+            }
+
+            const app = APPS[appKey];
+
+            // تعبئة البيانات
+            document.getElementById('appIcon').src = app.icon;
+            document.getElementById('appIcon').alt = app.name;
+            document.getElementById('appName').textContent = app.name;
+            document.getElementById('appVersion').textContent = app.version;
+            document.getElementById('appSize').textContent = app.size ? 'الحجم: ' + app.size : '';
+
+            // زر التحميل
+            document.getElementById('downloadBtn').onclick = () => {
+                window.location.href = app.download;
+            };
+
+            // عنوان الصفحة
+            document.title = 'تحميل ' + app.name + ' ' + app.version;
+
+            showState('appState');
+        }
+
+        // تشغيل بعد تحميل DOM
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // في حال كانت الصفحة محمّلة مسبقاً
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
+            initApp();
+        }
+    </script>
 
 </body>
 </html>
