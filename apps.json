@@ -1,22 +1,29 @@
 {
-  "warsha": {
-    "name": "Warsha",
-    "version": "1.0.0",
-    "size": "12 MB",
-    "icon": "warsha.png",
-    "download": "https://github.com/Abdullrahman-Abdullah/Warsha-Lab/releases/download/Reson-FTP/ResonFTP.apk"
+  "aboalias": {
+    "name": "ابو الياس للكهرباء",
+    "version": "2.1.2",
+    "size": "90 MB",
+    "icon": "aboalias.png",
+    "download": "https://huggingface.co/spaces/resonta/inventory_download/resolve/main/aboalias.apk"
   },
-  "reson": {
+  "resonftp": {
     "name": "Reson FTP",
     "version": "1.2.0",
-    "size": "8 MB",
-    "icon": "reson.png",
-    "download": "https://github.com/Abdullrahman-Abdullah/Warsha-Lab/releases/download/Reson-FTP/ResonFTP.apk"
+    "size": "59 MB",
+    "icon": "resonftp.png",
+    "download": "https://huggingface.co/spaces/resonta/inventory_download/resolve/main/resonftp.apk"
+  },
+  "resondownloader": {
+    "name": "Reson Downloader",
+    "version": "1.5.8",
+    "size": "50 MB",
+    "icon": "resondownloader.png",
+    "download": "https://huggingface.co/spaces/resonta/inventory_download/resolve/main/resondownloader.apk"
   },
   "talabaty": {
     "name": "طلباتي",
     "version": "1.9.3",
-    "size": "18 MB",
+    "size": "71 MB",
     "icon": "talabaty.png",
     "download": "https://huggingface.co/spaces/resonta/inventory_download/resolve/main/talabaty.apk"
   }
