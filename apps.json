@@ -1,0 +1,23 @@
+{
+  "warsha": {
+    "name": "Warsha",
+    "version": "1.0.0",
+    "size": "12 MB",
+    "icon": "warsha.png",
+    "download": "https://github.com/Abdullrahman-Abdullah/Warsha-Lab/releases/download/Reson-FTP/ResonFTP.apk"
+  },
+  "reson": {
+    "name": "Reson FTP",
+    "version": "1.2.0",
+    "size": "8 MB",
+    "icon": "reson.png",
+    "download": "https://github.com/Abdullrahman-Abdullah/Warsha-Lab/releases/download/Reson-FTP/ResonFTP.apk"
+  },
+  "talabaty": {
+    "name": "طلباتي",
+    "version": "1.9.3",
+    "size": "18 MB",
+    "icon": "talabaty.png",
+    "download": "https://huggingface.co/spaces/resonta/inventory_download/resolve/main/talabaty.apk"
+  }
+}
