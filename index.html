@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحميل التطبيقات</title>
+
+    <!-- ============ Meta الافتراضية (تُحدَّث ديناميكياً) ============ -->
+    <title>تحميل التطبيقات | Warsha Lab</title>
+    <meta name="description" content="صفحة تحميل التطبيقات الرسمية">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="تحميل التطبيقات | Warsha Lab">
+    <meta property="og:description" content="صفحة تحميل التطبيقات الرسمية">
+    <meta property="og:image" content="icon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="تحميل التطبيقات | Warsha Lab">
+    <meta name="twitter:description" content="صفحة تحميل التطبيقات الرسمية">
+    <meta name="twitter:image" content="icon.png">
+
+    <!-- Favicon -->
+    <link id="favicon" rel="icon" type="image/png" href="icon.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -12,11 +26,17 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html, body {
+            height: 100%;
+            overflow: hidden; /* منع التمرير افتراضياً */
+        }
+
         body {
             font-family: 'Cairo', sans-serif;
             background: #0a0a0a;
             color: #fafafa;
             min-height: 100vh;
+            min-height: 100dvh; /* للهواتف */
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
@@ -77,6 +97,36 @@
             100% { transform: translateY(-100vh) scale(0); opacity: 0; }
         }
 
+        /* ================= Main ================= */
+        /* الصفحة الرئيسية للتطبيق الواحد: تملأ المساحة بين الأعلى والأسفل */
+        main {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            position: relative;
+            z-index: 10;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* عند صفحة القائمة نسمح بالتمرير */
+        main.list-mode {
+            justify-content: flex-start;
+            padding-top: 32px;
+            padding-bottom: 16px;
+        }
+
+        main::-webkit-scrollbar { width: 6px; }
+        main::-webkit-scrollbar-track { background: transparent; }
+        main::-webkit-scrollbar-thumb {
+            background: #3f3f46;
+            border-radius: 10px;
+        }
+        main::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
         /* ================= زر التحميل ================= */
         .download-btn {
             background-color: #ffffff;
@@ -129,7 +179,7 @@
             font-weight: 600;
         }
 
-        /* ================= بطاقة التطبيق (صفحة القائمة) ================= */
+        /* ================= بطاقة التطبيق ================= */
         .app-card {
             background: rgba(20, 20, 20, 0.55);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -146,9 +196,9 @@
             text-decoration: none;
             color: inherit;
             cursor: pointer;
+            animation: cardIn 0.5s ease-out backwards;
         }
 
-        /* خط علوي متدرج يظهر عند التمرير */
         .app-card::before {
             content: '';
             position: absolute;
@@ -178,7 +228,12 @@
             transition: all 0.3s ease;
         }
 
-        /* عنوان الصفحة */
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* عنوان القائمة */
         .page-title {
             font-size: 2.25rem;
             font-weight: 900;
@@ -194,14 +249,29 @@
             to { background-position: 200% center; }
         }
 
-        /* حركة دخول البطاقات */
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
+        /* ================= Footer مثبّت ================= */
+        footer {
+            flex-shrink: 0;
+            width: 100%;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 10;
         }
 
-        .app-card {
-            animation: cardIn 0.5s ease-out backwards;
+        /* ================= Responsive ================= */
+        @media (max-height: 700px) {
+            .size-badge { margin-bottom: 0 !important; }
+            #appIcon { width: 80px !important; height: 80px !important; margin-bottom: 16px !important; }
+        }
+
+        @media (max-height: 600px) {
+            #appName { font-size: 1.1rem !important; }
+            #appVersion { margin-bottom: 8px !important; }
+            footer { padding: 10px 24px; gap: 10px; }
         }
     </style>
 </head>
@@ -212,7 +282,7 @@
     <div id="particles"></div>
 
     <!-- ================= المحتوى الرئيسي ================= -->
-    <main class="flex-1 flex flex-col items-center justify-center text-center px-4 py-14 relative z-10 w-full">
+    <main id="mainContent">
 
         <!-- حالة التحميل -->
         <div id="loadingState" class="flex flex-col items-center gap-4">
@@ -226,28 +296,23 @@
             <p id="errorMessage" class="text-sm text-zinc-500">تأكد من الرابط أو تواصل معنا</p>
         </div>
 
-        <!-- ============ حالة تطبيق واحد (عند ?app=...) ============ -->
+        <!-- ============ حالة تطبيق واحد ============ -->
         <div id="appState" class="state-hidden flex flex-col items-center">
 
-            <!-- أيقونة التطبيق -->
             <img id="appIcon"
                  src=""
                  alt="أيقونة التطبيق"
                  class="w-24 h-24 rounded-2xl mb-6 border border-zinc-800 object-cover shadow-2xl bg-zinc-900">
 
-            <!-- اسم التطبيق -->
             <h1 id="appName" class="text-2xl font-bold mb-1"></h1>
 
-            <!-- رقم الإصدار -->
             <p id="appVersion" class="text-sm text-zinc-500 font-medium mb-3"></p>
 
-            <!-- شارة الحجم -->
             <span class="size-badge" style="margin-bottom: 28px;">
                 <i class="fas fa-database"></i>
                 <span id="appSize"></span>
             </span>
 
-            <!-- زر التحميل -->
             <a id="downloadBtn"
                href="#"
                rel="noreferrer"
@@ -258,22 +323,19 @@
 
         </div>
 
-        <!-- ============ حالة كل التطبيقات (عند عدم وجود ?app=) ============ -->
+        <!-- ============ حالة كل التطبيقات ============ -->
         <div id="listState" class="state-hidden w-full max-w-5xl">
 
-            <!-- العنوان -->
-            <div class="mb-12">
-                <h1 class="page-title mb-3">تطبيقاتي</h1>
+            <div class="mb-10 text-center">
+                <h1 class="page-title mb-2">تطبيقاتي</h1>
                 <p class="text-sm text-zinc-500">اختر التطبيق الذي تريد تحميله</p>
             </div>
 
-            <!-- شبكة البطاقات -->
             <div id="appsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- تُولَّد البطاقات هنا -->
             </div>
 
-            <!-- إذا كان الملف فارغاً -->
-            <div id="emptyList" class="state-hidden mt-8">
+            <div id="emptyList" class="state-hidden mt-8 text-center">
                 <i class="fas fa-folder-open text-4xl text-zinc-600 mb-3"></i>
                 <p class="text-zinc-500 text-sm">لا توجد تطبيقات حالياً</p>
             </div>
@@ -283,9 +345,7 @@
     </main>
 
     <!-- ================= التذييل ================= -->
-    <footer class="w-full py-8 px-6 flex flex-col items-center gap-6 relative z-10">
-
-        <!-- أيقونات التواصل -->
+    <footer>
         <div class="flex gap-6">
             <a id="whatsappLink" href="#" class="social-icon text-2xl" title="واتساب">
                 <i class="fab fa-whatsapp"></i>
@@ -295,11 +355,9 @@
             </a>
         </div>
 
-        <!-- الحقوق -->
         <p class="text-xs text-zinc-600 font-semibold tracking-wide uppercase">
             POWERED BY ABDULLRAHMAN ABDULLAH
         </p>
-
     </footer>
 
     <script>
@@ -328,6 +386,44 @@
         })();
 
         /* ============================================================
+           تحديث Meta Tags ديناميكياً
+           ============================================================ */
+        function setMeta(name, property, content) {
+            let el = name
+                ? document.querySelector(`meta[name="${name}"]`)
+                : document.querySelector(`meta[property="${property}"]`);
+
+            if (!el) {
+                el = document.createElement('meta');
+                if (name) el.setAttribute('name', name);
+                else el.setAttribute('property', property);
+                document.head.appendChild(el);
+            }
+            el.setAttribute('content', content);
+        }
+
+        function updateMeta({ title, description, image }) {
+            // title
+            document.title = title;
+
+            // description
+            setMeta('description', null, description);
+
+            // OG
+            setMeta(null, 'og:title', title);
+            setMeta(null, 'og:description', description);
+            setMeta(null, 'og:image', image);
+
+            // Twitter
+            setMeta('twitter:title', null, title);
+            setMeta('twitter:description', null, description);
+            setMeta('twitter:image', null, image);
+
+            // favicon → أيقونة التطبيق
+            document.getElementById('favicon').href = image;
+        }
+
+        /* ============================================================
            الحالات
            ============================================================ */
         function showState(id) {
@@ -335,6 +431,9 @@
                 document.getElementById(s).classList.add('state-hidden');
             });
             document.getElementById(id).classList.remove('state-hidden');
+
+            // تفعيل وضع القائمة (يسمح بالتمرير) فقط في listState
+            document.getElementById('mainContent').classList.toggle('list-mode', id === 'listState');
         }
 
         function showError(msg) {
@@ -369,7 +468,7 @@
                 <h3 class="text-lg font-bold mb-1">${app.name}</h3>
                 <p class="text-xs text-zinc-500 mb-3">الإصدار ${app.version}</p>
 
-                <span class="size-badge" style="margin-bottom: 0;">
+                <span class="size-badge">
                     <i class="fas fa-database"></i>
                     ${app.size || '—'}
                 </span>
@@ -399,14 +498,20 @@
                 return;
             }
 
-            /* ---------- الحالة 1: لا يوجد ?app= → عرض كل التطبيقات ---------- */
+            /* ---------- الحالة 1: بدون ?app= → كل التطبيقات ---------- */
             if (!appKey) {
                 const entries = Object.entries(apps);
+
+                // meta الافتراضية للصفحة الرئيسية
+                updateMeta({
+                    title: 'تطبيقاتنا | Warsha Lab',
+                    description: 'تصفح وحمّل أحدث تطبيقاتنا مباشرة',
+                    image: 'icon.png'
+                });
 
                 if (entries.length === 0) {
                     showState('listState');
                     document.getElementById('emptyList').classList.remove('state-hidden');
-                    document.title = 'تطبيقاتنا';
                     return;
                 }
 
@@ -416,21 +521,34 @@
                     grid.appendChild(buildAppCard(key, app, i));
                 });
 
-                document.title = 'تطبيقاتنا | Warsha Lab';
                 showState('listState');
                 return;
             }
 
-            /* ---------- الحالة 2: يوجد ?app= → عرض تطبيق واحد ---------- */
+            /* ---------- الحالة 2: يوجد ?app= → تطبيق واحد ---------- */
             const app = apps[appKey];
             if (!app) {
+                updateMeta({
+                    title: 'التطبيق غير موجود | Warsha Lab',
+                    description: 'التطبيق المطلوب غير موجود',
+                    image: 'icon.png'
+                });
                 showError('تأكد من الرابط أو تواصل معنا');
-                document.title = 'التطبيق غير موجود';
                 return;
             }
 
+            const appImageUrl = 'images/' + app.icon;
+
+            /* ✅ تحديث Meta ديناميكياً */
+            updateMeta({
+                title: `تحميل ${app.name} الإصدار ${app.version}`,
+                description: `حمّل ${app.name} الإصدار ${app.version} — الحجم: ${app.size}`,
+                image: appImageUrl
+            });
+
+            /* تعبئة الواجهة */
             const iconEl = document.getElementById('appIcon');
-            iconEl.src = 'images/' + app.icon;
+            iconEl.src = appImageUrl;
             iconEl.alt = app.name;
 
             document.getElementById('appName').textContent = app.name;
@@ -438,8 +556,6 @@
             document.getElementById('appSize').textContent = app.size;
 
             document.getElementById('downloadBtn').href = app.download;
-
-            document.title = 'تحميل ' + app.name + ' | الإصدار ' + app.version;
 
             showState('appState');
         }
