@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحميل التطبيق</title>
+    <title>تحميل التطبيقات</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -127,7 +127,81 @@
             color: #a1a1aa;
             font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 28px;
+        }
+
+        /* ================= بطاقة التطبيق (صفحة القائمة) ================= */
+        .app-card {
+            background: rgba(20, 20, 20, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 26px 22px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        /* خط علوي متدرج يظهر عند التمرير */
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b5cf6, #3b82f6, transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 25px 50px -20px rgba(100, 100, 255, 0.5);
+        }
+
+        .app-card:hover::before { opacity: 1; }
+
+        .app-card:hover .card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .card-arrow {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        /* عنوان الصفحة */
+        .page-title {
+            font-size: 2.25rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 50%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+            line-height: 1.2;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* حركة دخول البطاقات */
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .app-card {
+            animation: cardIn 0.5s ease-out backwards;
         }
     </style>
 </head>
@@ -138,7 +212,7 @@
     <div id="particles"></div>
 
     <!-- ================= المحتوى الرئيسي ================= -->
-    <main class="flex-1 flex flex-col items-center justify-center text-center px-4 relative z-10">
+    <main class="flex-1 flex flex-col items-center justify-center text-center px-4 py-14 relative z-10 w-full">
 
         <!-- حالة التحميل -->
         <div id="loadingState" class="flex flex-col items-center gap-4">
@@ -152,7 +226,7 @@
             <p id="errorMessage" class="text-sm text-zinc-500">تأكد من الرابط أو تواصل معنا</p>
         </div>
 
-        <!-- حالة التطبيق -->
+        <!-- ============ حالة تطبيق واحد (عند ?app=...) ============ -->
         <div id="appState" class="state-hidden flex flex-col items-center">
 
             <!-- أيقونة التطبيق -->
@@ -168,7 +242,7 @@
             <p id="appVersion" class="text-sm text-zinc-500 font-medium mb-3"></p>
 
             <!-- شارة الحجم -->
-            <span class="size-badge">
+            <span class="size-badge" style="margin-bottom: 28px;">
                 <i class="fas fa-database"></i>
                 <span id="appSize"></span>
             </span>
@@ -181,6 +255,28 @@
                 <i class="fab fa-android text-xl"></i>
                 تحميل التطبيق
             </a>
+
+        </div>
+
+        <!-- ============ حالة كل التطبيقات (عند عدم وجود ?app=) ============ -->
+        <div id="listState" class="state-hidden w-full max-w-5xl">
+
+            <!-- العنوان -->
+            <div class="mb-12">
+                <h1 class="page-title mb-3">تطبيقاتنا</h1>
+                <p class="text-sm text-zinc-500">اختر التطبيق الذي تريد تحميله</p>
+            </div>
+
+            <!-- شبكة البطاقات -->
+            <div id="appsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- تُولَّد البطاقات هنا -->
+            </div>
+
+            <!-- إذا كان الملف فارغاً -->
+            <div id="emptyList" class="state-hidden mt-8">
+                <i class="fas fa-folder-open text-4xl text-zinc-600 mb-3"></i>
+                <p class="text-zinc-500 text-sm">لا توجد تطبيقات حالياً</p>
+            </div>
 
         </div>
 
@@ -235,7 +331,7 @@
            الحالات
            ============================================================ */
         function showState(id) {
-            ['loadingState', 'errorState', 'appState'].forEach(s => {
+            ['loadingState', 'errorState', 'appState', 'listState'].forEach(s => {
                 document.getElementById(s).classList.add('state-hidden');
             });
             document.getElementById(id).classList.remove('state-hidden');
@@ -247,29 +343,85 @@
         }
 
         /* ============================================================
-           منطق التطبيق
+           تحميل apps.json
+           ============================================================ */
+        async function loadApps() {
+            const res = await fetch('apps.json', { cache: 'no-store' });
+            if (!res.ok) throw new Error('failed to load apps.json');
+            return await res.json();
+        }
+
+        /* ============================================================
+           بناء بطاقة تطبيق واحدة
+           ============================================================ */
+        function buildAppCard(key, app, index) {
+            const a = document.createElement('a');
+            a.href = '?app=' + encodeURIComponent(key);
+            a.className = 'app-card';
+            a.style.animationDelay = (index * 0.08) + 's';
+
+            a.innerHTML = `
+                <img src="images/${app.icon}"
+                     alt="${app.name}"
+                     class="w-20 h-20 rounded-2xl mb-4 border border-zinc-800 object-cover bg-zinc-900 shadow-lg"
+                     onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22><rect width=%2280%22 height=%2280%22 rx=%2216%22 fill=%22%2327272a%22/><text x=%2240%22 y=%2248%22 font-size=%2228%22 text-anchor=%22middle%22 fill=%22%2371717a%22 font-family=%22sans-serif%22>?</text></svg>'">
+
+                <h3 class="text-lg font-bold mb-1">${app.name}</h3>
+                <p class="text-xs text-zinc-500 mb-3">الإصدار ${app.version}</p>
+
+                <span class="size-badge" style="margin-bottom: 0;">
+                    <i class="fas fa-database"></i>
+                    ${app.size || '—'}
+                </span>
+
+                <div class="mt-5 flex items-center gap-2 text-xs font-semibold text-zinc-400 card-arrow">
+                    <span>عرض التفاصيل</span>
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+            `;
+
+            return a;
+        }
+
+        /* ============================================================
+           منطق الصفحة
            ============================================================ */
         async function initApp() {
             const params = new URLSearchParams(window.location.search);
             const appKey = (params.get('app') || '').toLowerCase().trim();
 
-            if (!appKey) {
-                showError('لم يتم تحديد اسم التطبيق في الرابط (?app=...)');
-                document.title = 'التطبيق غير موجود';
-                return;
-            }
-
             let apps;
             try {
-                const res = await fetch('apps.json', { cache: 'no-store' });
-                if (!res.ok) throw new Error('failed to load apps.json');
-                apps = await res.json();
+                apps = await loadApps();
             } catch (err) {
                 showError('تعذّر تحميل بيانات التطبيقات. حاول لاحقاً.');
                 console.error(err);
                 return;
             }
 
+            /* ---------- الحالة 1: لا يوجد ?app= → عرض كل التطبيقات ---------- */
+            if (!appKey) {
+                const entries = Object.entries(apps);
+
+                if (entries.length === 0) {
+                    showState('listState');
+                    document.getElementById('emptyList').classList.remove('state-hidden');
+                    document.title = 'تطبيقاتنا';
+                    return;
+                }
+
+                const grid = document.getElementById('appsGrid');
+                grid.innerHTML = '';
+                entries.forEach(([key, app], i) => {
+                    grid.appendChild(buildAppCard(key, app, i));
+                });
+
+                document.title = 'تطبيقاتنا | Warsha Lab';
+                showState('listState');
+                return;
+            }
+
+            /* ---------- الحالة 2: يوجد ?app= → عرض تطبيق واحد ---------- */
             const app = apps[appKey];
             if (!app) {
                 showError('تأكد من الرابط أو تواصل معنا');
@@ -277,7 +429,6 @@
                 return;
             }
 
-            // تعبئة البيانات
             const iconEl = document.getElementById('appIcon');
             iconEl.src = 'images/' + app.icon;
             iconEl.alt = app.name;
