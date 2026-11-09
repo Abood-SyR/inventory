@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- ============ Meta الافتراضية (تُحدَّث ديناميكياً) ============ -->
     <title>تحميل التطبيقات | Reson </title>
-    <meta name="description" content="صفحة تحميل التطبيقات الرسمية">
+    <meta name="description" content="صفحة تحميل التطبيقات  ">
     <meta property="og:type" content="website">
     <meta property="og:title" content="تحميل التطبيقات | Reson ">
-    <meta property="og:description" content="صفحة تحميل التطبيقات الرسمية">
+    <meta property="og:description" content="صفحة تحميل التطبيقات  ">
     <meta property="og:image" content="icon.png">
+    <meta property="og:site_name" content="Reson">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:type" content="image/png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="تحميل التطبيقات | Reson ">
-    <meta name="twitter:description" content="صفحة تحميل التطبيقات الرسمية">
+    <meta name="twitter:description" content="صفحة تحميل التطبيقات  ">
     <meta name="twitter:image" content="icon.png">
 
-    <!-- Favicon -->
     <link id="favicon" rel="icon" type="image/png" href="icon.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,7 +30,7 @@
 
         html, body {
             height: 100%;
-            overflow: hidden; /* منع التمرير افتراضياً */
+            overflow: hidden;
         }
 
         body {
@@ -36,13 +38,12 @@
             background: #0a0a0a;
             color: #fafafa;
             min-height: 100vh;
-            min-height: 100dvh; /* للهواتف */
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
         }
 
-        /* ================= خلفية الشبكة المتوهجة ================= */
         .bg-animated {
             position: fixed;
             top: 0; left: 0;
@@ -97,8 +98,6 @@
             100% { transform: translateY(-100vh) scale(0); opacity: 0; }
         }
 
-        /* ================= Main ================= */
-        /* الصفحة الرئيسية للتطبيق الواحد: تملأ المساحة بين الأعلى والأسفل */
         main {
             flex: 1 1 auto;
             display: flex;
@@ -112,7 +111,6 @@
             overflow-x: hidden;
         }
 
-        /* عند صفحة القائمة نسمح بالتمرير */
         main.list-mode {
             justify-content: flex-start;
             padding-top: 32px;
@@ -127,7 +125,6 @@
         }
         main::-webkit-scrollbar-thumb:hover { background: #52525b; }
 
-        /* ================= زر التحميل ================= */
         .download-btn {
             background-color: #ffffff;
             color: #050505;
@@ -141,7 +138,6 @@
             transform: translateY(-2px);
         }
 
-        /* ================= أيقونات التواصل ================= */
         .social-icon {
             color: #71717a;
             transition: color 0.2s ease, transform 0.2s ease;
@@ -152,7 +148,6 @@
             transform: translateY(-3px);
         }
 
-        /* ================= الحالات ================= */
         .state-hidden { display: none !important; }
 
         .spinner {
@@ -165,7 +160,6 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* شارة الحجم */
         .size-badge {
             display: inline-flex;
             align-items: center;
@@ -179,7 +173,6 @@
             font-weight: 600;
         }
 
-        /* ================= بطاقة التطبيق ================= */
         .app-card {
             background: rgba(20, 20, 20, 0.55);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -233,7 +226,6 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* عنوان القائمة */
         .page-title {
             font-size: 2.25rem;
             font-weight: 900;
@@ -249,7 +241,6 @@
             to { background-position: 200% center; }
         }
 
-        /* ================= Footer مثبّت ================= */
         footer {
             flex-shrink: 0;
             width: 100%;
@@ -262,7 +253,6 @@
             z-index: 10;
         }
 
-        /* ================= Responsive ================= */
         @media (max-height: 700px) {
             .size-badge { margin-bottom: 0 !important; }
             #appIcon { width: 80px !important; height: 80px !important; margin-bottom: 16px !important; }
@@ -277,26 +267,20 @@
 </head>
 <body>
 
-    <!-- ================= عناصر الخلفية ================= -->
     <div class="bg-animated"></div>
     <div id="particles"></div>
 
-    <!-- ================= المحتوى الرئيسي ================= -->
     <main id="mainContent">
 
-        <!-- حالة التحميل -->
         <div id="loadingState" class="flex flex-col items-center gap-4">
             <div class="spinner"></div>
         </div>
 
-        <!-- حالة الخطأ -->
         <div id="errorState" class="state-hidden flex flex-col items-center">
-            
             <h1 class="text-2xl font-bold mb-2">التطبيق غير موجود</h1>
             <p id="errorMessage" class="text-sm text-zinc-500">تأكد من الرابط أو تواصل معنا</p>
         </div>
 
-        <!-- ============ حالة تطبيق واحد ============ -->
         <div id="appState" class="state-hidden flex flex-col items-center">
 
             <img id="appIcon"
@@ -323,7 +307,6 @@
 
         </div>
 
-        <!-- ============ حالة كل التطبيقات ============ -->
         <div id="listState" class="state-hidden w-full max-w-5xl">
 
             <div class="mb-10 text-center">
@@ -332,7 +315,6 @@
             </div>
 
             <div id="appsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- تُولَّد البطاقات هنا -->
             </div>
 
             <div id="emptyList" class="state-hidden mt-8 text-center">
@@ -344,7 +326,6 @@
 
     </main>
 
-    <!-- ================= التذييل ================= -->
     <footer>
         <div class="flex gap-6">
             <a id="whatsappLink" href="#" class="social-icon text-2xl" title="واتساب">
@@ -361,18 +342,12 @@
     </footer>
 
     <script>
-        /* ============================================================
-           روابط التواصل
-           ============================================================ */
         const WHATSAPP_URL = "https://wa.me/+963981082693";
         const INSTAGRAM_URL = "https://www.instagram.com/abdullrahman.abdulah";
 
         document.getElementById('whatsappLink').href = WHATSAPP_URL;
         document.getElementById('instagramLink').href = INSTAGRAM_URL;
 
-        /* ============================================================
-           الجزيئات
-           ============================================================ */
         (function createParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 30; i++) {
@@ -385,9 +360,6 @@
             }
         })();
 
-        /* ============================================================
-           تحديث Meta Tags ديناميكياً
-           ============================================================ */
         function setMeta(name, property, content) {
             let el = name
                 ? document.querySelector(`meta[name="${name}"]`)
@@ -402,37 +374,42 @@
             el.setAttribute('content', content);
         }
 
+        function toAbsoluteUrl(path) {
+            try {
+                return new URL(path, window.location.href).href;
+            } catch (e) {
+                return path;
+            }
+        }
+
         function updateMeta({ title, description, image }) {
-            // title
+            const absoluteImage = toAbsoluteUrl(image);
+
             document.title = title;
 
-            // description
             setMeta('description', null, description);
 
-            // OG
             setMeta(null, 'og:title', title);
             setMeta(null, 'og:description', description);
-            setMeta(null, 'og:image', image);
+            setMeta(null, 'og:image', absoluteImage);
+            setMeta(null, 'og:image:secure_url', absoluteImage);
+            setMeta(null, 'og:image:alt', title);
+            setMeta(null, 'og:url', window.location.href);
 
-            // Twitter
             setMeta('twitter:title', null, title);
             setMeta('twitter:description', null, description);
-            setMeta('twitter:image', null, image);
+            setMeta('twitter:image', null, absoluteImage);
+            setMeta('twitter:image:alt', null, title);
 
-            // favicon → أيقونة التطبيق
             document.getElementById('favicon').href = image;
         }
 
-        /* ============================================================
-           الحالات
-           ============================================================ */
         function showState(id) {
             ['loadingState', 'errorState', 'appState', 'listState'].forEach(s => {
                 document.getElementById(s).classList.add('state-hidden');
             });
             document.getElementById(id).classList.remove('state-hidden');
 
-            // تفعيل وضع القائمة (يسمح بالتمرير) فقط في listState
             document.getElementById('mainContent').classList.toggle('list-mode', id === 'listState');
         }
 
@@ -441,18 +418,12 @@
             showState('errorState');
         }
 
-        /* ============================================================
-           تحميل apps.json
-           ============================================================ */
         async function loadApps() {
             const res = await fetch('apps.json', { cache: 'no-store' });
             if (!res.ok) throw new Error('failed to load apps.json');
             return await res.json();
         }
 
-        /* ============================================================
-           بناء بطاقة تطبيق واحدة
-           ============================================================ */
         function buildAppCard(key, app, index) {
             const a = document.createElement('a');
             a.href = '?app=' + encodeURIComponent(key);
@@ -482,9 +453,6 @@
             return a;
         }
 
-        /* ============================================================
-           منطق الصفحة
-           ============================================================ */
         async function initApp() {
             const params = new URLSearchParams(window.location.search);
             const appKey = (params.get('app') || '').toLowerCase().trim();
@@ -498,14 +466,12 @@
                 return;
             }
 
-            /* ---------- الحالة 1: بدون ?app= → كل التطبيقات ---------- */
             if (!appKey) {
                 const entries = Object.entries(apps);
 
-                // meta الافتراضية للصفحة الرئيسية
                 updateMeta({
                     title: 'التطبيقات | Reson ',
-                    description: 'تصفح وحمّل أحدثالتطبيقات مباشرة',
+                    description: 'تصفح وحمّل أحدث التطبيقات مباشرة',
                     image: 'icon.png'
                 });
 
@@ -525,7 +491,6 @@
                 return;
             }
 
-            /* ---------- الحالة 2: يوجد ?app= → تطبيق واحد ---------- */
             const app = apps[appKey];
             if (!app) {
                 updateMeta({
@@ -539,14 +504,12 @@
 
             const appImageUrl = 'images/' + app.icon;
 
-            /* ✅ تحديث Meta ديناميكياً */
             updateMeta({
-                title: `تحميل ${app.name} الإصدار ${app.version}`,
-                description: `حمّل ${app.name} الإصدار ${app.version} — الحجم: ${app.size}`,
+                title: `${app.name} | تحميل الإصدار ${app.version}`,
+                description: `تحديث تطبيق ${app.name} — الإصدار ${app.version} — الحجم: ${app.size}`,
                 image: appImageUrl
             });
 
-            /* تعبئة الواجهة */
             const iconEl = document.getElementById('appIcon');
             iconEl.src = appImageUrl;
             iconEl.alt = app.name;
